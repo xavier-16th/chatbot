@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__, static_folder="static")
+app = Flask(__name__, static_folder="static", static_url_path="")
 client = InferenceClient(api_key=os.environ.get("HF_API_KEY"))
 
 # Store conversation history per session (in-memory; resets on restart)
@@ -60,6 +60,26 @@ def chat():
     return jsonify({"reply": assistant_message})
 
 
+@app.route("/sessions", methods=["GET"])
+def sessions():
+    """Return a list of all session IDs with a preview (first user message)."""
+    result = []
+    for sid, msgs in conversations.items():
+        first_user = next((m["content"] for m in msgs if m["role"] == "user"), None)
+        if first_user:
+            preview = first_user[:50] + ("..." if len(first_user) > 50 else "")
+            result.append({"session_id": sid, "preview": preview})
+    return jsonify({"sessions": result})
+
+
+@app.route("/history", methods=["POST"])
+def history():
+    session_id = request.get_json().get("session_id", "default")
+    msgs = conversations.get(session_id, [])
+    # Return only user and assistant messages (skip the system prompt)
+    return jsonify({"history": [m for m in msgs if m["role"] != "system"]})
+
+
 @app.route("/reset", methods=["POST"])
 def reset():
     session_id = request.get_json().get("session_id", "default")
@@ -68,4 +88,4 @@ def reset():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=8080)    

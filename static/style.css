@@ -1,0 +1,191 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #f4f4f8;
+  height: 100vh;
+  display: flex;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 260px;
+  background: #1e1e2e;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.sidebar-header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #333;
+}
+.sidebar-header h2 {
+  font-size: .95rem;
+  font-weight: 600;
+  color: #fff;
+}
+.sidebar-header button {
+  background: rgba(255,255,255,.1);
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: .8rem;
+  transition: background .2s;
+}
+.sidebar-header button:hover { background: rgba(255,255,255,.2); }
+.session-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+.session-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: .85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background .15s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.session-item:hover { background: rgba(255,255,255,.08); }
+.session-item.active { background: rgba(110,72,170,.4); color: #fff; }
+.session-item .delete-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: .8rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: none;
+}
+.session-item:hover .delete-btn { display: inline; }
+.session-item .delete-btn:hover { color: #f66; background: rgba(255,255,255,.1); }
+.no-sessions {
+  padding: 20px 12px;
+  color: #666;
+  font-size: .85rem;
+  text-align: center;
+}
+
+/* ── Main chat area ── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-header {
+  background: linear-gradient(135deg, #6e48aa, #9d50bb);
+  color: #fff;
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chat-header h1 { font-size: 1.15rem; font-weight: 600; }
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  line-height: 1.5;
+  font-size: .95rem;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.message.user {
+  align-self: flex-end;
+  background: #6e48aa;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.message.assistant {
+  align-self: flex-start;
+  background: #f0eef6;
+  color: #333;
+  border-bottom-left-radius: 4px;
+}
+.message.error {
+  align-self: center;
+  background: #ffe0e0;
+  color: #a00;
+  font-size: .85rem;
+}
+
+.typing-indicator {
+  align-self: flex-start;
+  padding: 12px 16px;
+  background: #f0eef6;
+  border-radius: 16px;
+  display: none;
+}
+.typing-indicator span {
+  display: inline-block;
+  width: 8px; height: 8px;
+  margin: 0 2px;
+  background: #9d50bb;
+  border-radius: 50%;
+  animation: bounce .6s infinite alternate;
+}
+.typing-indicator span:nth-child(2) { animation-delay: .2s; }
+.typing-indicator span:nth-child(3) { animation-delay: .4s; }
+@keyframes bounce { to { transform: translateY(-6px); opacity: .4; } }
+
+.input-area {
+  padding: 16px 24px;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 10px;
+  background: #fff;
+}
+.input-area textarea {
+  flex: 1;
+  resize: none;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: .95rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .2s;
+  max-height: 120px;
+}
+.input-area textarea:focus { border-color: #6e48aa; }
+.input-area button {
+  background: #6e48aa;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.input-area button:hover { background: #5a3d8a; }
+.input-area button:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Mobile: hide sidebar by default */
+@media (max-width: 700px) {
+  .sidebar { display: none; }
+}
